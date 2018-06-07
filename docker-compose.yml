@@ -1,0 +1,24 @@
+version: '3.6' 
+services:
+  # EFK
+  fluentd:
+    build: ./configs/fluentd
+    volumes:
+      - ./configs/fluentd/conf:/fluentd/etc
+    depends_on:
+      - elasticsearch
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+  elasticsearch:
+    image: elasticsearch
+    expose:
+      - 9200
+    ports:
+      - 9200:9200
+  kibana:
+    image: kibana
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
